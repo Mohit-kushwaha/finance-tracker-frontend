@@ -14,7 +14,7 @@ export default function FinancePage() {
         try
         {
             setLoading(true);
-            const response = await fetch("http://localhost:5000/api/analyze", {
+            const response = await fetch("https://finance-tracker-backend-6xbi.onrender.com/api/analyze", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export default function FinancePage() {
 
             {!loading && !result && <FinanceForm onAnalyze={handleAnalyze} />}
 
-            {!loading && result && <FinanceResult result={result} />}
+            {!loading && result && <FinanceResult data={result} />}
         </div>
     );
 }

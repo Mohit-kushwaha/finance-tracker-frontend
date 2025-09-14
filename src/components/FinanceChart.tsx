@@ -10,12 +10,12 @@ interface FinanceChartProps {
     categories: string[];
     seriesData: {
         name: string;
-        data: number[];
-        type: "line" | "area" | "column" | "bar";
+        data: (number | { name: string; y: number })[]; // support both formats
+        type: "line" | "area" | "column" | "bar" | "pie";
         color?: string;
         dashStyle?: string;
         opacity?: number;
-    }[];
+      }[];
     chartType?: string;
 }
 
@@ -48,20 +48,36 @@ const FinanceChart = ({ title, categories, seriesData, chartType }: FinanceChart
             }
         },
         tooltip: {
-            formatter: function () {
-                return `<b>${this.series.name}</b><br/>${this.x}: ₹${this.y?.toLocaleString()}`;
-            }
-        },
-        plotOptions: {
-            series: {
-                marker: {
-                    radius: 4
+            formatter: function (this: any) {
+                // Pie chart points with a "name"
+                if (this.point && this.point.name && this.series.type === "pie") {
+                  return `<b>${this.point.name}</b>: ₹${this.y?.toLocaleString()}`;
                 }
-            },
-            column: {
-                borderRadius: 3
+                // Line/Area/Column/Bar series
+                return `<b>${this.series.name}</b><br/>${this.x}: ₹${this.y?.toLocaleString()}`;
+              }
+            
+          },          
+          plotOptions: {
+            pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                enabled: true,
+                distance: 20,
+                color: '#000000',   // force black text
+                style: {
+                  fontSize: '12px',
+                  fontWeight: 'bold',
+                  textOutline: 'none'  // 👈 prevents Highcharts from adding white stroke that can "erase" text
+                },
+                allowOverlap: true, // 👈 ensures label won’t be hidden if overlapping
+                crop: false,        // 👈 don’t crop outside plot area
+                overflow: 'allow',  // 👈 let labels overflow chart bounds
+                format: '{point.name}'
+              }      
             }
-        },
+          },       
         series: seriesData.map(data => ({
             name: data.name,
             data: data.data,

@@ -15,7 +15,7 @@ export default function Home() {
       setLoading(true);
       setResult(null);
 
-      const response = await fetch("http://localhost:5000/api/analyze", {
+      const response = await fetch("https://finance-tracker-backend-6xbi.onrender.com/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
