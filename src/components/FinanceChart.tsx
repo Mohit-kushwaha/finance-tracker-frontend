@@ -71,7 +71,6 @@ const FinanceChart = ({ title, categories, seriesData, chartType }: FinanceChart
                   fontWeight: 'bold',
                   textOutline: 'none'  // 👈 prevents Highcharts from adding white stroke that can "erase" text
                 },
-                allowOverlap: true, // 👈 ensures label won’t be hidden if overlapping
                 crop: false,        // 👈 don’t crop outside plot area
                 overflow: 'allow',  // 👈 let labels overflow chart bounds
                 format: '{point.name}'
